@@ -21,14 +21,16 @@ class ViewController: UIViewController, SendBack {
         // Do any additional setup after loading the view, typically from a nib.
         billField.becomeFirstResponder()
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        billField.becomeFirstResponder()
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
-    }
-
-    @IBAction func onTap(_ sender: Any) {
-        view.endEditing(true); //true - forced down keyboard
     }
     
     func calculateTip() {

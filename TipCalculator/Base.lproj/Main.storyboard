@@ -103,9 +103,6 @@
                             <constraint firstItem="4NO-qH-ZZm" firstAttribute="top" secondItem="9ew-ru-kZr" secondAttribute="bottom" constant="54" id="pqJ-Fn-6tj"/>
                             <constraint firstAttribute="trailingMargin" secondItem="pOE-hA-Vt9" secondAttribute="trailing" constant="16" id="yun-ce-SG0"/>
                         </constraints>
-                        <connections>
-                            <outletCollection property="gestureRecognizers" destination="maK-b1-ftc" appends="YES" id="p7I-X6-b6C"/>
-                        </connections>
                     </view>
                     <navigationItem key="navigationItem" title="Tip Calculator" id="CAF-LO-Ybg">
                         <barButtonItem key="rightBarButtonItem" title="Settings" id="gXR-mz-9hz">
@@ -122,11 +119,6 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="maK-b1-ftc">
-                    <connections>
-                        <action selector="onTap:" destination="BYZ-38-t0r" id="8r9-s1-nUg"/>
-                    </connections>
-                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="639.5" y="96.5"/>
         </scene>
@@ -153,6 +145,7 @@
                             </label>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="25" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="3Dl-Gv-cHc">
                                 <rect key="frame" x="231" y="173" width="88" height="30"/>
+                                <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="fys-hz-b8q"/>
                                     <constraint firstAttribute="width" constant="88" id="vDa-76-prP"/>
@@ -168,6 +161,7 @@
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="20" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="832-Yf-WYd">
                                 <rect key="frame" x="143.5" y="173" width="88" height="30"/>
+                                <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="WFn-rv-WNO"/>
                                     <constraint firstAttribute="width" constant="88" id="wsl-mE-NIE"/>
@@ -190,6 +184,7 @@
                             </button>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="18" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xGP-ec-QSk">
                                 <rect key="frame" x="55.5" y="173" width="88" height="30"/>
+                                <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="T8Q-Ce-IUx"/>
                                     <constraint firstAttribute="width" constant="88" id="h4b-io-WJn"/>
