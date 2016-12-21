@@ -14,11 +14,16 @@ class ViewController: UIViewController, SendBack {
     @IBOutlet weak var totalLabel: UILabel!
     @IBOutlet weak var billField: UITextField!
     @IBOutlet weak var tipControl: UISegmentedControl!
+    @IBOutlet weak var separationBar: UIView!
+    let defaultBlue = UIColor(red: 0, green: 122.0/255.0, blue: 1, alpha: 1)
+    
     var tipPercentages = [0.18, 0.2, 0.25]
+    var currency = "$"
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        separationBar.backgroundColor = defaultBlue
         billField.becomeFirstResponder()
     }
     
@@ -39,8 +44,14 @@ class ViewController: UIViewController, SendBack {
         let tip = bill * tipPercentages[tipControl.selectedSegmentIndex]
         let total = bill + tip
         
-        tipLabel.text = /*"$\(tip)"*/ String(format: "$%.2f", tip)
-        totalLabel.text = String(format: "$%.2f", total)
+        if (currency == "$" || currency == "€" || currency == "£") {
+            tipLabel.text = /*"$\(tip)"*/ String(format: "%@%.2f", currency, tip)
+            totalLabel.text = String(format: "%@%.2f", currency, total)
+        }
+        else {
+            tipLabel.text = /*"$\(tip)"*/ String(format: "%.2f%@",  tip, currency)
+            totalLabel.text = String(format: "%.2f%@", total, currency)
+        }
     }
     
     @IBAction func calculateTip(_ sender: Any) {
@@ -56,10 +67,17 @@ class ViewController: UIViewController, SendBack {
         settingsViewController.rate1Double = tipPercentages[1] * 100
         settingsViewController.rate2Double = tipPercentages[2] * 100
         
+        settingsViewController.pickedCurrency = currency
+        
         self.navigationController?.pushViewController(settingsViewController, animated: true)
     }
     
-    func setSettingsData(rate0: Double, rate1: Double, rate2: Double) {
+    @IBAction func clear(_ sender: Any) {
+        billField.text = ""
+        calculateTip()
+    }
+    
+    func setSettingsData(rate0: Double, rate1: Double, rate2: Double, pickedCurrency: String) {
         tipControl.setTitle("\(Int(rate0))%", forSegmentAt: 0)
         tipControl.setTitle("\(Int(rate1))%", forSegmentAt: 1)
         tipControl.setTitle("\(Int(rate2))%", forSegmentAt: 2)
@@ -67,6 +85,8 @@ class ViewController: UIViewController, SendBack {
         tipPercentages[0] = rate0 * 0.01
         tipPercentages[1] = rate1 * 0.01
         tipPercentages[2] = rate2 * 0.01
+        
+        currency = pickedCurrency
         
         calculateTip()
     }

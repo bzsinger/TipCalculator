@@ -9,10 +9,10 @@
 import UIKit
 
 protocol SendBack {
-    func setSettingsData(rate0: Double, rate1: Double, rate2: Double)
+    func setSettingsData(rate0: Double, rate1: Double, rate2: Double, pickedCurrency: String)
 }
 
-class SettingsViewController: UIViewController, UINavigationControllerDelegate {
+class SettingsViewController: UIViewController, UINavigationControllerDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
     
     @IBOutlet weak var settingsLabel: UILabel!
     @IBOutlet weak var rate0: UITextField!
@@ -24,6 +24,12 @@ class SettingsViewController: UIViewController, UINavigationControllerDelegate {
     @IBOutlet weak var border: UILabel!
     @IBOutlet weak var border0: UILabel!
     @IBOutlet weak var border1: UILabel!
+    @IBOutlet weak var borderThin: UILabel!
+    @IBOutlet weak var borderThin1: UILabel!
+    @IBOutlet weak var border0Rate1: UILabel!
+    @IBOutlet weak var border1Rate1: UILabel!
+    
+    @IBOutlet weak var pickerView: UIPickerView!
     
     var delegate:SendBack?
     
@@ -34,6 +40,9 @@ class SettingsViewController: UIViewController, UINavigationControllerDelegate {
     var saved = true
     
     let defaultBlue = UIColor(red: 0, green: 122.0/255.0, blue: 1, alpha: 1)
+    
+    var pickerData: [String] = [String]()
+    var pickedCurrency = "$"    
     
     @IBAction func editingRate0(_ sender: Any) {
         editingRate(rate0)
@@ -56,8 +65,8 @@ class SettingsViewController: UIViewController, UINavigationControllerDelegate {
             rate.layer.cornerRadius = 5
         }
         else if (rate === rate1) {
-            border0.backgroundColor = defaultBlue
-            border1.backgroundColor = defaultBlue
+            border0Rate1.backgroundColor = defaultBlue
+            border1Rate1.backgroundColor = defaultBlue
             rate.layer.cornerRadius = 0
         }
         else if (rate === rate2) {
@@ -94,21 +103,28 @@ class SettingsViewController: UIViewController, UINavigationControllerDelegate {
         
         border0.backgroundColor = UIColor.white
         border1.backgroundColor = UIColor.white
+        
+        border0Rate1.backgroundColor = UIColor.white
+        border1Rate1.backgroundColor = UIColor.white
+        
+        rate0.selectedTextRange = nil
+        rate1.selectedTextRange = nil
+        rate2.selectedTextRange = nil
     }
     
     @IBAction func rate0Changed(_ sender: Any) {
         rate0Double = Double(rate0.text!) ?? 0
-        rateBackgroundChanged(rate0)
+        //rateBackgroundChanged(rate0)
         rateChanged()
     }
     @IBAction func rate1Changed(_ sender: Any) {
         rate1Double = Double(rate1.text!) ?? 0
-        rateBackgroundChanged(rate1)
+        //rateBackgroundChanged(rate1)
         rateChanged()
     }
     @IBAction func rate2Changed(_ sender: Any) {
         rate2Double = Double(rate2.text!) ?? 0
-        rateBackgroundChanged(rate2)
+        //rateBackgroundChanged(rate2)
         rateChanged()
     }
 
@@ -182,19 +198,51 @@ class SettingsViewController: UIViewController, UINavigationControllerDelegate {
         border.layer.cornerRadius = 8
         border.layer.borderColor = defaultBlue.cgColor
         
+        borderThin.backgroundColor = defaultBlue
+        borderThin1.backgroundColor = defaultBlue
+        
         resetEditing()
         
         rate0EndedEditing(self)
         rate1EndedEditing(self)
         rate2EndedEditing(self)
         
+        pickerView.delegate = self
+        pickerView.dataSource = self
+        
+        pickerData = ["$", "€", "£", "₣", "¤", "؋", "Ar", "Ƀ", "฿", "B/.", "Br", "Bs.", "Bs.F.", "Gh¢", "Ch", "₡", "C$", "D", "ден", "دج" , ".د.ب", "د.ع", "JD", "د.ك", "ل.د", "дин", "د.ت", "د.م.", "د.إ", "Db", "₫", "Esc", "ƒ", "Ft", "FBu", "FCFA", "CFA", "Fr", "FRw", "G", "gr", "₲", "h", "₴", "₭", "Kč", "kr", "kn", "MK", "ZK", "Kz", "K", "L", "Le", "лв", "E", "lp", "₺", "M", "KM", "MT", "Nfk", "₦", "Nu.", "UM", "T$", "MOP$", "₱", "Pt.", "ج.م.", "LL", "LS", "P", "Q", "q", "R", "R$", "ر.ع.", "ر.ق", "ر.س", "៛", "RM", "₽", "Rf.", "₹", "Rs", "SRe", "Rp", "₪", "Ksh", "Sh.So.", "USh", "S/", "сом", "৳", "WS$", "₸", "₮", "VT", "₩", "¥", "zł"]
+        
+        pickerView.selectRow(pickerData.index(of: pickedCurrency)!, inComponent: 0, animated: false)
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
+    // The number of columns of data
+    func numberOfComponents(in: UIPickerView) -> Int {
+        return 1
+    }
+    
+    // The number of rows of data
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return pickerData.count
+    }
+    
+    // The data to return for the row and component (column) that's being passed in
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return pickerData[row]
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        if (pickerData[row] != pickedCurrency) {
+            pickedCurrency = pickerData[row]
+            saved = false
+            saveButton.isEnabled = true
+        }
+    }
+    
     @IBAction func reset(_ sender: Any) {
         rate0Double = 18.0
         rate1Double = 20.0
@@ -217,8 +265,13 @@ class SettingsViewController: UIViewController, UINavigationControllerDelegate {
         rate0Double = Double(rate0.text!) ?? 0
         rate1Double = Double(rate1.text!) ?? 0
         rate2Double = Double(rate2.text!) ?? 0
-        delegate?.setSettingsData(rate0: rate0Double, rate1: rate1Double, rate2: rate2Double)
+        delegate?.setSettingsData(rate0: rate0Double, rate1: rate1Double, rate2: rate2Double, pickedCurrency: pickedCurrency)
     }
+    
+    /*@IBAction func touchedRate0(_ sender: Any) {
+        rate0.tintColor = UIColor.blue
+        rate0.selectedTextRange = rate0.textRange(from: rate0.beginningOfDocument, to: rate0.endOfDocument)
+    }*/
     
     @IBAction func onTap(_ sender: Any) {
         if (saved) {
