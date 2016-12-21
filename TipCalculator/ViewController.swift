@@ -8,6 +8,24 @@
 
 import UIKit
 
+struct SeparatedNumber {
+    static let formatterWithSeparator: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.groupingSeparator = ","
+        formatter.numberStyle = .decimal
+        formatter.paddingPosition = NumberFormatter.PadPosition.afterSuffix
+        formatter.minimumFractionDigits = 2
+        formatter.maximumFractionDigits = 2
+        return formatter
+    }()
+}
+
+extension Double {
+    var stringFormattedWithSeparator: String {
+        return SeparatedNumber.formatterWithSeparator.string(from: self as NSNumber) ?? ""
+    }
+}
+
 class ViewController: UIViewController, SendBack {
 
     @IBOutlet weak var tipLabel: UILabel!
@@ -45,12 +63,12 @@ class ViewController: UIViewController, SendBack {
         let total = bill + tip
         
         if (currency == "$" || currency == "€" || currency == "£") {
-            tipLabel.text = /*"$\(tip)"*/ String(format: "%@%.2f", currency, tip)
-            totalLabel.text = String(format: "%@%.2f", currency, total)
+            tipLabel.text = "\(currency)\(tip.stringFormattedWithSeparator)"
+            totalLabel.text = "\(currency)\(total.stringFormattedWithSeparator)"
         }
         else {
-            tipLabel.text = /*"$\(tip)"*/ String(format: "%.2f%@",  tip, currency)
-            totalLabel.text = String(format: "%.2f%@", total, currency)
+            tipLabel.text = "\(tip.stringFormattedWithSeparator)\(currency)"
+            totalLabel.text = "\(total.stringFormattedWithSeparator)\(currency)"
         }
     }
     
